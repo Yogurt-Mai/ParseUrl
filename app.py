@@ -24,10 +24,11 @@ app.config['UPLOAD_FOLDER'] = r'D:/web/flask-file-uploader-master/data'
 app.config['THUMBNAIL_FOLDER'] = r'D:/web/flask-file-uploader-master/data/thumbnail/'
 app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024
 
-ALLOWED_EXTENSIONS = set(['txt', 'gif', 'png', 'jpg', 'jpeg', 'bmp', 'rar', 'zip', '7zip', 'doc', 'docx', 'pcap'])
+ALLOWED_EXTENSIONS = set(['pcap'])
 IGNORED_FILES = set(['.gitignore'])
 
 bootstrap = Bootstrap(app)
+urls=[]
 
 
 def allowed_file(filename):
@@ -89,16 +90,29 @@ def upload():
                 
                 # get file size after saving
                 size = os.path.getsize(uploaded_file_path)
-
+               
                 # return json for js call back
                 result = uploadfile(name=filename, type=mime_type, size=size)
                 name=os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 finalres=ParseUrls.get_urls(name)
-                finalres=[str(i) for i in finalres]
                 #return "<br>".join(finalres)
+                urls.clear()
+                line='''{"className":"<a href='%s'>%s</a>", 
+                    "methodName":"%s",
+                    "description":"测试DEMO",
+                    "spendTime":"0ms",
+                    "status":"失败",
+                    "log":[
+                        "this is demo!"
+                            ]
+                },
+                '''
+                for url,name in finalres.items():
+                    urls.append(line%(url,url,name))
+                #print(urls)
                 jsondata={"name": filename+"分析报告",
                     "size": size, 
-                    "url": "/report", 
+                    "url": "/report?Filename=%s&Size=%d"%(filename,len(urls)), 
                     "deleteUrl": "delete/%s" % name, 
                     "deleteType": "DELETE",}
 
@@ -123,7 +137,11 @@ def upload():
 
 @app.route('/report')
 def about():
-    return render_template("report.html",name="")
+    #print(''.join(urls))
+    Filename=request.args.get("Filename","")
+    Size=request.args.get("Size",0)
+    print(Filename,Size)
+    return render_template("report.html",data="".join(urls),filename=Filename,size=Size)
 
 
 @app.route("/delete/<string:filename>", methods=['DELETE'])
