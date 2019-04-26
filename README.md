@@ -1,25 +1,15 @@
-flask-file-uploader
+﻿﻿恶意流量分析系统
+
 ===================
 
-## Description
-File Upload Script which built on Python Flask and [jQuery-File-Upload](https://github.com/blueimp/jQuery-File-Upload/) with multiple file selection, drag&amp;drop support, progress bars, validation and preview images, audio and video for jQuery.
 
 
-## Setup
-- Install system package. See the `system_package.txt` file. (*Unix)
+## 主界面
 
-- Create virtual enviroment (use `virtualenv`) and activate it.
+![image](https://raw.githubusercontent.com/Yogurt-Mai/ParseUrl/master/static/img/main.png)
 
-- Then install python packages:  
-```
-$ pip install -r requirements.txt
-```
 
-- Run it:
 
-```
-$ python app.py
-```
+## 报告界面
 
-- Go to http://127.0.0.1:9191
-
+![image](https://raw.githubusercontent.com/Yogurt-Mai/ParseUrl/master/static/img/report.png)
