@@ -2,7 +2,7 @@
 ===================
 
 ## 主界面
-![image](http://github.com/Yogurt-Mai/ParseUrl/raw/master/static/img/main.PNG)
+![image](http://github.com/Yogurt-Mai/ParseUrl/raw/master/static/img/main.png)
 
 ## 报告界面
-![image](http://github.com/Yogurt-Mai/ParseUrl/raw/master/static/img/report.PNG)
+![image](http://github.com/Yogurt-Mai/ParseUrl/raw/master/static/img/report.png)
