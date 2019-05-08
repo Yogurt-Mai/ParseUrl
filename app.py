@@ -99,7 +99,7 @@ def upload():
                 urls.clear()
                 line='''{"className":"<a href='%s'>%s</a>", 
                     "methodName":"%s",
-                    "description":"测试DEMO",
+                    "description":"%s",
                     "spendTime":"0ms",
                     "status":"失败",
                     "log":[
@@ -107,8 +107,8 @@ def upload():
                             ]
                 },
                 '''
-                for url,name in finalres.items():
-                    urls.append(line%(url,url,name))
+                for url,item in finalres.items():
+                    urls.append(line%(url,url,item[0],item[1]))
                 #print(urls)
                 jsondata={"name": filename+"分析报告",
                     "size": size, 

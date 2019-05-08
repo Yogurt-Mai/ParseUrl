@@ -22,7 +22,6 @@ def allowed_file(filename):
 
 @app.route('/about')
 def about():
-    
     name = request.args.get('name','')
     return render_template("about.html",name=name)
 @app.route('/', methods=['GET', 'POST'])
