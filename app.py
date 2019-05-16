@@ -95,20 +95,20 @@ def upload():
                 result = uploadfile(name=filename, type=mime_type, size=size)
                 name=os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 finalres=ParseUrls.get_urls(name)
-                #return "<br>".join(finalres)
                 urls.clear()
                 line='''{"className":"<a href='%s'>%s</a>", 
                     "methodName":"%s",
                     "description":"%s",
                     "spendTime":"0ms",
-                    "status":"失败",
+                    "status":"0.0kb",
+                    "ipRegion":"%s",
                     "log":[
                         "this is demo!"
                             ]
                 },
                 '''
                 for url,item in finalres.items():
-                    urls.append(line%(url,url,item[0],item[1]))
+                    urls.append(line%(url,url,item[0],item[1],ParseUrls.checkip({'ip':item[3]})))
                 #print(urls)
                 jsondata={"name": filename+"分析报告",
                     "size": size, 

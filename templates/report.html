@@ -7073,7 +7073,7 @@
                     <table class="table table-bordered">
                         <thead>
                         <tr>
-                            <th>编号</th><th>URL/文件</th><th>协议</th><th>攻击类型</th><th>时间</th><th>流量大小</th><th>详细信息</th>
+                            <th>编号</th><th>URL/文件</th><th>协议</th><th>IP地区</th><th>攻击类型</th><th>时间</th><th>流量大小</th><th>详细信息</th>
                         </tr>
                         </thead>
                         <tbody id="detailBody">
@@ -7227,6 +7227,7 @@
                         "<td>" + (i + 1) + "</td>" +
                         "<td>" + n["className"] + "</td>" +
                         "<td>" + n["methodName"] + "</td>" +
+                        "<td>" + n["ipRegion"] + "</td>" +
                         "<td>" + n["description"] + "</td>" +
                         "<td>" + n["spendTime"] + "</td>" +
                         status + "<td><button type='button' onclick='details(this)' buttonIndex='" + i + "' class='btn btn-primary btn-xs' style='margin-bottom: 0px'>展开</button></td></tr>"
