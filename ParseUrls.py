@@ -17,9 +17,9 @@ def judgeAttack(url):
         tmpdic[pattern] = size
     v = list(tmpdic.values())
     if v[-1] >= 1:
-        catgory = "xss"
+        catgory = "<font color=red>xss</font>"
     elif any(v[:-2]):
-        catgory = "sqli"
+        catgory = "<font color=red>sqli</font>"
     else:
         catgory = "normal"
     return catgory
@@ -38,7 +38,8 @@ def     get_urls(filename):
                 req_url = (b"http://"+ http_header["Host"] + http_header["Path"]).decode('utf-8')
                 ua=(b"User-Agent:"+http_header["User-Agent"]).decode('utf-8')
                 _type=judgeAttack(req_url)
-                req_list[req_url]=[ua,_type,pkt.getlayer(IP).src,pkt.getlayer(IP).dst]
+                t = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(pkt.time))
+                req_list[req_url]=[ua,_type,pkt.getlayer(IP).src,pkt.getlayer(IP).dst,t]
             #if pkt.haslayer(http.HTTPResponse):
                 #http_header = pkt[http.HTTPResponse].fields
                 #print(pkt[http.HTTPResponse].payload)

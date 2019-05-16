@@ -97,18 +97,18 @@ def upload():
                 finalres=ParseUrls.get_urls(name)
                 urls.clear()
                 line='''{"className":"<a href='%s'>%s</a>", 
-                    "methodName":"%s",
+                    "methodName":"0",
                     "description":"%s",
-                    "spendTime":"0ms",
+                    "spendTime":"%s",
                     "status":"0.0kb",
                     "ipRegion":"%s",
                     "log":[
-                        "this is demo!"
+                        "%s"
                             ]
                 },
                 '''
                 for url,item in finalres.items():
-                    urls.append(line%(url,url,item[0],item[1],ParseUrls.checkip({'ip':item[3]})))
+                    urls.append(line%(url,url,item[1],item[4],item[3]+":"+ParseUrls.checkip({'ip':item[3]}),item[0]))
                 #print(urls)
                 jsondata={"name": filename+"分析报告",
                     "size": size, 
