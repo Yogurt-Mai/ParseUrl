@@ -457,6 +457,8 @@
         },
 
         _formatPercentage: function (floatValue) {
+            if (floatValue == 1)
+                return "正在分析"
             return (floatValue * 100).toFixed(2) + ' %';
         },
 

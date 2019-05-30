@@ -10,10 +10,12 @@ import PIL
 from PIL import Image
 import simplejson
 import traceback
+import time,datetime
 
 from flask import Flask, request, render_template, redirect, url_for, send_from_directory
 from flask_bootstrap import Bootstrap
 from werkzeug import secure_filename
+from urllib import parse
 import ParseUrls
 from lib.upload_file import uploadfile
 
@@ -90,32 +92,43 @@ def upload():
                 
                 # get file size after saving
                 size = os.path.getsize(uploaded_file_path)
-               
+                timestart=datetime.datetime.now()
                 # return json for js call back
                 result = uploadfile(name=filename, type=mime_type, size=size)
                 name=os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                finalres=ParseUrls.get_urls(name)
+                finalres,proto_flow =ParseUrls.get_urls(name)
+                proto=["TCP", "UDP", "ARP", "ICMP", "DNS", "HTTP", "HTTPS"]
+                flowstr="["
+                for i in range(len(proto)):
+                    flowstr+=str(proto_flow[proto[i]])+","
+                flowstr=flowstr.strip(',')+"]"
+                #print(flowstr)
                 urls.clear()
-                line='''{"className":"<a href='%s'>%s</a>", 
+                line='''{"className":"<a href='%s' title='%s'>%s</a>", 
                     "methodName":"0",
                     "description":"%s",
                     "spendTime":"%s",
-                    "status":"0.0kb",
+                    "status":"%s",
                     "ipRegion":"%s",
                     "log":[
                         "%s"
                             ]
                 },
                 '''
+                attackcnt=0
+                for i in finalres.values():
+                    if i[1]!="normal":
+                        attackcnt+=1
                 for url,item in finalres.items():
-                    urls.append(line%(url,url,item[1],item[4],item[3]+":"+ParseUrls.checkip({'ip':item[3]}),item[0]))
-                #print(urls)
+                    urls.append(line%(url,parse.unquote(url),url[:50],item[1],item[4],ParseUrls.check_ua(item[0]),item[3]+":"+ParseUrls.checkip(item[3]),item[0]))
+                urls.append(proto_flow)
+                timend=datetime.datetime.now()
                 jsondata={"name": filename+"分析报告",
                     "size": size, 
-                    "url": "/report?Filename=%s&Size=%d"%(filename,len(urls)), 
+                    "url": "/report?Filename=%s&Size=%d&cnt=%d&time=%s"%(filename,len(urls),attackcnt,timend-timestart),
                     "deleteUrl": "delete/%s" % name, 
                     "deleteType": "DELETE",}
-
+                os.remove(uploaded_file_path)
                 return simplejson.dumps({"files": [jsondata]})
             
             return simplejson.dumps({"files": [result.get_file()]})
@@ -140,8 +153,18 @@ def about():
     #print(''.join(urls))
     Filename=request.args.get("Filename","")
     Size=request.args.get("Size",0)
+    attacknum=request.args.get("cnt",0)
+    runtime = request.args.get("time",0)
     print(Filename,Size)
-    return render_template("report.html",data="".join(urls),filename=Filename,size=Size)
+    proto_flow=urls[-1]
+    proto = ["TCP", "UDP", "ARP", "ICMP", "DNS", "HTTP", "HTTPS"]
+    pkeys='["TCP", "UDP", "ARP", "ICMP", "DNS", "HTTP", "HTTPS"]'
+    flowstr = "["
+    for i in range(len(proto)):
+        flowstr += str(proto_flow[proto[i]]) + ","
+    flowstr = flowstr.strip(',') + "]"
+    # print(flowstr)
+    return render_template("report.html",pcap_keys=pkeys,pcap_count=proto_flow,data="".join(urls[:-2]),flowdata=flowstr,normal=int(Size)-int(attacknum),alltime=runtime, filename=Filename,attack=attacknum,size=Size,time=time.ctime(time.time()))
 
 
 @app.route("/delete/<string:filename>", methods=['DELETE'])
