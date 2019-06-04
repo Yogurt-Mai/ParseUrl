@@ -18,6 +18,7 @@ from werkzeug import secure_filename
 from urllib import parse
 import ParseUrls
 from lib.upload_file import uploadfile
+from flask_mysqldb import MySQL
 
 
 app = Flask(__name__)
@@ -25,6 +26,11 @@ app.config['SECRET_KEY'] = 'hard to guess string'
 app.config['UPLOAD_FOLDER'] = r'D:/web/flask-file-uploader-master/data'
 app.config['THUMBNAIL_FOLDER'] = r'D:/web/flask-file-uploader-master/data/thumbnail/'
 app.config['MAX_CONTENT_LENGTH'] = 100 * 1024 * 1024
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'root'
+app.config['MYSQL_DB'] = 'url'
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+mysql = MySQL(app)
 
 ALLOWED_EXTENSIONS = set(['pcap'])
 IGNORED_FILES = set(['.gitignore'])
@@ -67,6 +73,13 @@ def create_thumbnail(image):
         print(traceback.format_exc())
         return False
 
+
+@app.route('/user')
+def users():
+    cur = mysql.connection.cursor()
+    cur.execute('''SELECT user_name, password FROM url.user''')
+    rv = cur.fetchall()
+    return str(rv)
 
 @app.route("/upload", methods=['GET', 'POST'])
 def upload():
@@ -198,6 +211,19 @@ def get_file(filename):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return render_template('index.html')
+
+@app.route('/login', methods=['POST','GET'])
+def login():
+    if request.method == 'POST':
+        if(request.form['uname'] and request.form['psw']):
+            user_name = request.form['uname']
+            password = request.form['psw']
+            cur = mysql.connection.cursor()
+            cur.execute("INSERT INTO user (user_name,user_pwd,user_group) values('%s','%s','user')"%(user_name,password))
+            return render_template('index.html')
+    else:
+        return render_template('login2.html')
+
 
 
 if __name__ == '__main__':
