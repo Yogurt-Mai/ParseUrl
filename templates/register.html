@@ -1,0 +1,95 @@
+<!DOCTYPE>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>用户添加</title>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+
+<link rel="stylesheet" href="../static/css/add.css" type="text/css" media="screen" />
+<link rel="stylesheet" href="../static/css/bootstrap.min.css" type="text/css" media="screen" />
+
+</head>
+<body>
+<div class="div_from_aoto" style="width: 500px;">
+    <FORM>
+        <DIV class="control-group">
+            <label class="laber_from">用户名</label>
+            <DIV  class="controls" ><INPUT class="input_from" type=text placeholder=" 请输入用户名"><P class=help-block></P></DIV>
+        </DIV>
+        <DIV class="control-group">
+            <LABEL class="laber_from">密码</LABEL>
+            <DIV  class="controls" ><INPUT class="input_from" type=text placeholder=" 请输入密码"><P class=help-block></P></DIV>
+        </DIV>
+        <DIV class="control-group">
+            <LABEL class="laber_from" >确认密码</LABEL>
+            <DIV  class="controls" ><INPUT class="input_from" type=text placeholder=" 请输入确认密码"><P class=help-block></P></DIV>
+        </DIV>
+		<DIV class="control-group">
+            <LABEL class="laber_from" >手机号码</LABEL>
+            <DIV  class="controls" ><INPUT class="input_from" type=text placeholder=" 请输入手机号码"><P class=help-block></P></DIV>
+        </DIV>
+		<script type="text/javascript">
+
+function show1()
+
+{
+
+var value = document.getElementById("div1").style.display;
+
+if(value=="none")
+
+{
+
+document.getElementById("div1").style.display="block";
+document.getElementById("div2").style.display="none";
+}
+
+else
+{
+document.getElementById("div1").style.display="none";
+document.getElementById("div2").style.display="none";
+}
+}
+function show2()
+
+{
+
+var value = document.getElementById("div2").style.display;
+
+if(value=="none")
+
+{
+
+document.getElementById("div2").style.display="block";
+document.getElementById("div1").style.display="none";
+}
+
+else{
+document.getElementById("div1").style.display="none";
+document.getElementById("div2").style.display="none";
+}
+}
+
+</script>
+		<DIV class="control-group">
+            <LABEL class="laber_from" >注册公司/个人</LABEL>
+            <input type="button" value="公司" onClick="show1()"/>
+			<input type="button" value="个人" onClick="show2()"/>
+			<div id="div1" style="display:none">
+				<p>公司名字</p><input class="text01" placeholder="请输入公司名字" type="text" />
+				<p>公司注册号</p><input class="text02" placeholder="请输入公司注册号" type="text" />
+			</div>
+			<div id="div2" style="display:none">
+				<p>姓名</p><input class="text01" placeholder="请输入您的姓名" type="text" />
+				<p>身份证号码(实名认证)</p><input class="text02" placeholder="请输入身份证号码" type="text" />
+			</div>
+        </DIV>
+        <DIV class="control-group">
+            <LABEL class="laber_from" ></LABEL>
+            <DIV class="controls" ><button class="btn btn-success" style="width:120px;" >确认</button></DIV>
+        </DIV>
+    </FORM>
+</div>
+</body>
+</html>

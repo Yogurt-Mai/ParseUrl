@@ -28,44 +28,23 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="/">Home</a>
+            <a class="navbar-brand" href="/">主页</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li><a href="/">List Files</a></li>
+                <li><a href="/File" target="_blank">列表</a></li>
             </ul>
             <ul class="nav navbar-nav">
-                <li>
-                    <a onclick="document.getElementById('id01').style.display='block'" style="width:auto;">登录</a>
-                    <div id="id01" class="modal">
-                      
-                      <form class="modal-content animate" action="/login" method="post">
-                        <div class="imgcontainer">
-                          <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
-                          <img src="../static/img/img_avatar.png" alt="Avatar" class="avatar">
-                        </div>
-
-                        <div class="container">
-                          <label><b>Username</b></label>
-                          <input type="text" placeholder="Enter Username" name="uname" required>
-
-                          <label><b>Password</b></label>
-                          <input type="password" placeholder="Enter Password" name="psw" required>
-                          <br>
-                          <button class="btn btn-success fileinput-button" type="submit">登陆</button>&nbsp;&nbsp;
-                          <input type="checkbox" checked="checked"> 记住我
-                        </div>
-
-                        <div class="container" style="background-color:#f1f1f1">
-                          <button class="btn btn-danger delete" type="button" onclick="document.getElementById('id01').style.display='none'">Cancel</button>
-                          <span class="psw">Forgot <a href="#">password?</a></span>
-                        </div>
-                      </form>
-                    </div>
-                </li>
+            	<li><a href="/">{{ user_name }}</a></li>
             </ul>
+            <ul class="nav navbar-nav">
+            	<li><a href="/">{{ user_group }}</a></li>
+            </ul>            
             <ul class="nav navbar-nav">
                 <li><a href="/">关于</a></li>
+            </ul>
+        	<ul class="nav navbar-nav">
+                <li><a href="/login">退出</a></li>
             </ul>
         </div>
     </div>

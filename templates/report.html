@@ -7217,7 +7217,6 @@ myChart.setOption(option);
 
 <script type="text/javascript">
     var resultData = {
-    "testPass":1,
     "testResult":[
         {% autoescape false %}
         {{data}}
@@ -7228,7 +7227,7 @@ myChart.setOption(option);
     "testFail":{{attack}},
     "beginTime":"{{time}}",
     "totalTime":"{{alltime}}",
-    "testSkip":1,
+    "testSkip":{{normal}},
     "testPass":{{normal}}
 };
 

@@ -134,7 +134,9 @@ span.psw {
       <form class="modal-content animate" action="/login" method="post">
         <div class="imgcontainer">
           <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
-          <img src="../static/img/img_avatar.png" alt="Avatar" class="avatar">
+            <a href="/register">
+                <img src="../static/img/img_avatar.png" alt="Avatar" class="avatar">
+            </a>
         </div>
 
         <div class="container">
@@ -143,14 +145,15 @@ span.psw {
 
           <label><b>Password</b></label>
           <input type="password" placeholder="Enter Password" name="psw" required>
+          
+          <label><b>Company</b></label>
+          <input type="text" placeholder="Enter Company" name="company" required>
           <br>
           <button class="btn btn-success fileinput-button" type="submit">登陆</button>&nbsp;&nbsp;
-          <input type="checkbox" checked="checked"> 记住我
         </div>
 
         <div class="container" style="background-color:#f1f1f1">
-          <button class="btn btn-danger delete" type="button" onclick="document.getElementById('id01').style.display='none'">Cancel</button>
-          <span class="psw">Forgot <a href="#">password?</a></span>
+            <a class="btn btn-success fileinput-button" href="/login">登陆</a>
         </div>
       </form>
     </div>

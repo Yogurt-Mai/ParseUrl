@@ -3,23 +3,30 @@ from scapy.all import *
 import scapy_http.http as http
 from ip2Region import Ip2Region
 from user_agents import parse
-
+import urllib
+from collections    import OrderedDict
 def judgeAttack(url):
+    url= urllib.parse.unquote(url)
+    print(url)
     black = [
         'select.*from',
         'update.*set',
         'delete.*from',
         'insert.*into',
-        '<.*>.*</.*>'
+        r'union.*select',
+        r'and\s+.*=.*',
+        r'or\s+.*=.*'
+        '<.*>.*</.*>',
     ]
-    tmpdic = {}
+    tmpdic = OrderedDict()
     for pattern in black:
         size = len(re.findall(pattern, url, re.I))
         tmpdic[pattern] = size
     v = list(tmpdic.values())
+    #print(v[:-1])
     if v[-1] >= 1:
         catgory = "<font color=red>xss</font>"
-    elif any(v[:-2]):
+    elif sum(v[:-1])>0:
         catgory = "<font color=red>sqli</font>"
     else:
         catgory = "normal"

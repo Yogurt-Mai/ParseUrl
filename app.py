@@ -12,7 +12,7 @@ import simplejson
 import traceback
 import time,datetime
 
-from flask import Flask, request, render_template, redirect, url_for, send_from_directory
+from flask import Flask, request, render_template, redirect, url_for, send_from_directory, session
 from flask_bootstrap import Bootstrap
 from werkzeug import secure_filename
 from urllib import parse
@@ -81,6 +81,11 @@ def users():
     rv = cur.fetchall()
     return str(rv)
 
+
+@app.route('/File')
+def listFile():
+    return render_template("File.html")
+
 @app.route("/upload", methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST':
@@ -133,7 +138,7 @@ def upload():
                     if i[1]!="normal":
                         attackcnt+=1
                 for url,item in finalres.items():
-                    urls.append(line%(url,parse.unquote(url),url[:50],item[1],item[4],ParseUrls.check_ua(item[0]),item[3]+":"+ParseUrls.checkip(item[3]),item[0]))
+                    urls.append(line%(parse.quote(url),parse.quote(url),parse.quote(url[:50]),item[1],item[4],ParseUrls.check_ua(item[0]),item[3]+":"+ParseUrls.checkip(item[3]),item[0]))
                 urls.append(proto_flow)
                 timend=datetime.datetime.now()
                 jsondata={"name": filename+"分析报告",
@@ -210,21 +215,45 @@ def get_file(filename):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    if not 'user_name' in session:
+        return redirect(url_for('login'))
+    return render_template("index.html",user_name=session['user_name'], user_group=session['user_group'])
 
 @app.route('/login', methods=['POST','GET'])
 def login():
+    session.pop('user_name', None)
+    session.pop('user_group', None)
     if request.method == 'POST':
-        if(request.form['uname'] and request.form['psw']):
+        # if(request.form['uname'] and request.form['psw']):
+        #     user_name = request.form['uname']
+        #     password = request.form['psw']
+        #     cur = mysql.connection.cursor()
+        #     cur.execute("INSERT INTO user (user_name,user_pwd,user_group) values('%s','%s','user')"%(user_name,password))
+        if (request.form['uname'] and request.form['psw']):
             user_name = request.form['uname']
             password = request.form['psw']
             cur = mysql.connection.cursor()
-            cur.execute("INSERT INTO user (user_name,user_pwd,user_group) values('%s','%s','user')"%(user_name,password))
-            return render_template('index.html')
+            cur.execute("select user_pwd,user_group from user where user_name='%s'"%(user_name))
+            result = cur.fetchall()
+            if result:
+                for row in result:
+                    if password == row['user_pwd']:
+                        session['user_name'] = user_name
+                        session['user_group'] = row['user_group']
+                        return render_template('index.html')
+                    else:
+                        return redirect(url_for('login'))
+            else:
+                return redirect(url_for('login'))
     else:
-        return render_template('login2.html')
+        return render_template('login.html')
 
-
+@app.route('/register', methods=['POST','GET'])
+def register():
+    if request.method == 'POST':
+        pass
+    else:
+        return render_template('register.html')
 
 if __name__ == '__main__':
     app.run(debug=True, port=9191)
